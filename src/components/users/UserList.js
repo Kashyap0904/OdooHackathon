@@ -52,9 +52,14 @@ const UserList = () => {
 
   if (loading) return <LoadingSpinner />;
 
+  // Filter out the logged-in user and any admin users
+  const filteredUsers = users.filter(
+    (u) => u.id !== currentUser?.id && !u.is_admin
+  );
+
   // Pagination logic
-  const totalPages = Math.ceil(users.length / USERS_PER_PAGE);
-  const paginatedUsers = users.slice(
+  const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
+  const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * USERS_PER_PAGE,
     currentPage * USERS_PER_PAGE
   );

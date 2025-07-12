@@ -1,0 +1,290 @@
+/* Skills Page Styles */
+.skills-card {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 28px 28px 28px;
+  position: relative;
+}
+.skills-section {
+  margin-bottom: 32px;
+}
+.skills-section h4 {
+  margin-bottom: 12px;
+  color: #007bff;
+  font-size: 1.13rem;
+  font-weight: 700;
+}
+.skills-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.skills-form select {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background: #fafbfc;
+  transition: border 0.2s;
+}
+.skills-form select:focus {
+  border: 1.5px solid #007bff;
+  outline: none;
+}
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 8px;
+}
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 4px 14px 4px 12px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  background: #e6f4ea;
+  color: #28a745;
+  margin-bottom: 4px;
+  position: relative;
+}
+.skill-chip.wanted {
+  background: #e6f0fa;
+  color: #007bff;
+}
+.remove-btn {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin-left: 6px;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.remove-btn:hover:not(:disabled) {
+  background: #fdeaea;
+}
+.no-skills {
+  color: #aaa;
+  font-size: 1rem;
+  margin-top: 4px;
+}
+@media (max-width: 600px) {
+  .skills-card {
+    padding: 18px 6px;
+  }
+  .skills-form {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .skills-list {
+    gap: 8px 4px;
+  }
+}
+
+/* New Skill Form Styles */
+.skills-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.new-skill-form {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.new-skill-form h4 {
+  margin: 0 0 20px 0;
+  color: #333;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Multi-Select Dropdown Styles */
+.multi-select-container {
+  position: relative;
+  flex: 1;
+}
+
+.multi-select-button {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background: #fafbfc;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border 0.2s;
+  text-align: left;
+}
+
+.multi-select-button:hover {
+  border: 1.5px solid #007bff;
+}
+
+.multi-select-button:focus {
+  outline: none;
+  border: 1.5px solid #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.dropdown-arrow {
+  font-size: 0.8rem;
+  color: #666;
+  transition: transform 0.2s;
+}
+
+.multi-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 300px;
+  z-index: 1000;
+  margin-top: 2px;
+  overflow: hidden;
+}
+
+.search-container {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.skills-options {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.checkbox-item:last-child {
+  border-bottom: none;
+}
+
+.checkbox-item:hover {
+  background-color: #f8f9fa;
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.skill-category {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.no-results {
+  padding: 15px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  background: #f8f9fa;
+}
+
+/* Responsive adjustments for multi-select */
+@media (max-width: 600px) {
+  .multi-select-dropdown {
+    max-height: 150px;
+  }
+  
+  .checkbox-item {
+    padding: 10px 12px;
+  }
+  
+  .checkbox-label {
+    font-size: 1rem;
+  }
+} 

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { FaUser, FaSignOutAlt, FaCog } from 'react-icons/fa';
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { FaUser, FaSignOutAlt, FaCog } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -19,19 +19,36 @@ const Navbar = () => {
           <Link to="/" className="navbar-brand">
             Skill Swap Platform
           </Link>
-          
+
           <ul className="navbar-nav">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/users">Browse Users</Link></li>
-            
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/users">Browse Users</Link>
+            </li>
+
             {user ? (
               <>
-                <li><Link to="/skills">My Skills</Link></li>
-                <li><Link to="/swaps">Swaps</Link></li>
+                <li>
+                  <Link to="/skills">My Skills</Link>
+                </li>
+                <li>
+                  <Link to="/swaps">Swaps</Link>
+                </li>
+                <li>
+                  <Link to="/tracking">Tracking</Link>
+                </li>
                 {user.is_admin && (
-                  <li><Link to="/admin">Admin Panel</Link></li>
+                  <li>
+                    <Link to="/admin">Admin Panel</Link>
+                  </li>
                 )}
-                <li><Link to="/profile"><FaUser /> Profile</Link></li>
+                <li>
+                  <Link to="/profile">
+                    <FaUser /> Profile
+                  </Link>
+                </li>
                 <li>
                   <button onClick={handleLogout} className="btn btn-secondary">
                     <FaSignOutAlt /> Logout
@@ -40,8 +57,12 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <li><Link to="/login">Login</Link></li>
-                <li><Link to="/register">Register</Link></li>
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+                <li>
+                  <Link to="/register">Register</Link>
+                </li>
               </>
             )}
           </ul>
@@ -51,4 +72,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
