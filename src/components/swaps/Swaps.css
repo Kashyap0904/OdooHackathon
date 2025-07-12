@@ -1,0 +1,111 @@
+/* Swap Requests Page Styles */
+.swaps-card {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 28px 28px 28px;
+  position: relative;
+}
+
+.swap-request-card {
+  background: #f9f9fb;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-bottom: 22px;
+  padding: 18px 18px 12px 18px;
+  transition: box-shadow 0.2s;
+}
+
+.swap-request-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.swap-user-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f0f0;
+  border: 2px solid #e6e6e6;
+  margin-right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  color: #bbb;
+}
+
+.swap-user-info {
+  flex: 1;
+}
+
+.swap-user-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.swap-user-username {
+  color: #888;
+  font-size: 0.98rem;
+}
+
+.swap-status {
+  font-weight: 700;
+  text-transform: capitalize;
+  font-size: 1.05rem;
+  padding: 4px 14px;
+  border-radius: 8px;
+  margin-left: 10px;
+}
+.swap-status-pending { background: #fffbe6; color: #bfa100; }
+.swap-status-accepted { background: #e6fbe6; color: #28a745; }
+.swap-status-rejected { background: #fdeaea; color: #d32f2f; }
+
+.swap-request-details {
+  margin-bottom: 10px;
+  font-size: 1.02rem;
+}
+
+.swap-request-details strong {
+  color: #222;
+}
+
+.swap-request-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.swaps-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 0 0;
+  gap: 4px;
+}
+
+.swaps-pagination .btn {
+  min-width: 38px;
+  font-size: 1rem;
+  padding: 6px 0;
+}
+
+@media (max-width: 600px) {
+  .swaps-card {
+    padding: 18px 6px;
+  }
+  .swap-request-card {
+    padding: 10px 6px 8px 6px;
+  }
+  .swap-request-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .swap-user-avatar {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+} 

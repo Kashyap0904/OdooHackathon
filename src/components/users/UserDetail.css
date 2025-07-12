@@ -1,0 +1,196 @@
+/* User Detail (Public Profile) Styles */
+.user-detail-card {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  padding: 32px 28px 28px 28px;
+  position: relative;
+}
+
+.user-detail-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.user-detail-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #f0f0f0;
+  border: 3px solid #e6e6e6;
+  margin-right: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #bbb;
+}
+
+.user-detail-info {
+  flex: 1;
+}
+
+.user-detail-info h2 {
+  margin: 0 0 6px 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.user-detail-username {
+  color: #888;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.user-detail-location {
+  color: #444;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.user-detail-availability {
+  color: #007bff;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.user-detail-section {
+  margin-bottom: 16px;
+}
+
+.user-detail-skill-chip {
+  display: inline-block;
+  border-radius: 12px;
+  padding: 3px 12px;
+  margin: 0 8px 8px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #e6f4ea;
+  color: #28a745;
+}
+
+.user-detail-skill-chip.wanted {
+  background: #e6f0fa;
+  color: #007bff;
+}
+
+.user-detail-rating {
+  color: #ffc107;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.user-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.user-detail-actions .btn {
+  min-width: 120px;
+  font-size: 1rem;
+  padding: 10px 0;
+}
+
+@media (max-width: 600px) {
+  .user-detail-card {
+    padding: 18px 6px;
+  }
+  .user-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .user-detail-avatar {
+    margin-right: 0;
+    margin-bottom: 18px;
+  }
+} 
+
+.swap-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swap-modal {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  padding: 32px 28px 24px 28px;
+  min-width: 320px;
+  max-width: 95vw;
+  width: 400px;
+  position: relative;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.swap-modal h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.swap-modal-field {
+  margin-bottom: 18px;
+}
+
+.swap-modal-field label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+  color: #222;
+}
+
+.swap-modal-field select,
+.swap-modal-field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background: #fafbfc;
+  margin-top: 2px;
+  transition: border 0.2s;
+}
+
+.swap-modal-field select:focus,
+.swap-modal-field textarea:focus {
+  border: 1.5px solid #007bff;
+  outline: none;
+}
+
+.swap-modal-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.swap-modal-actions .btn {
+  min-width: 100px;
+  font-size: 1rem;
+  padding: 8px 0;
+}
+
+@media (max-width: 500px) {
+  .swap-modal {
+    padding: 16px 6px 12px 6px;
+    width: 98vw;
+    min-width: unset;
+  }
+} 
