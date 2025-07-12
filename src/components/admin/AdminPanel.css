@@ -265,6 +265,122 @@
   background-color: #e0a800;
 }
 
+/* Email Section */
+.email-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.email-form {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.25);
+}
+
+.email-selection {
+  margin-top: 25px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 20px;
+}
+
+.email-selection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.email-selection-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.email-selection-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.email-list {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.email-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.email-item:last-child {
+  border-bottom: none;
+}
+
+.email-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+.email-checkbox:hover {
+  background-color: #e9ecef;
+}
+
+.email-checkbox input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+
+.email-info {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.email-actions {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.email-actions .btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  min-width: 150px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .admin-panel {
@@ -303,5 +419,19 @@
   
   .user-actions {
     flex-direction: column;
+  }
+
+  .email-selection-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .email-selection-actions {
+    justify-content: center;
+  }
+
+  .email-list {
+    max-height: 200px;
   }
 } 

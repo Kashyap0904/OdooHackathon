@@ -7,6 +7,7 @@ const multer = require("multer");
 const { body, validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
+const axios = require("axios");
 require("dotenv").config();
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -18,7 +19,7 @@ const DB_PATH = process.env.DB_PATH || path.join(__dirname, "skill_swap.db");
 // Middleware
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000" || "http://localhost:7070",
     credentials: true,
   })
 );
@@ -849,6 +850,27 @@ app.get("/api/admin/reports/:type", authenticateToken, (req, res) => {
       res.json(cleanRows);
     }
   });
+});
+
+// Proxy route for mail API
+app.post("/api/mail/send", async (req, res) => {
+  try {
+    const response = await axios.post("https://localhost:7070/MailSystem/send", req.body, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      httpsAgent: new (require('https').Agent)({
+        rejectUnauthorized: false
+      })
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error("Mail API Error:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json({
+      error: "Failed to send email",
+      details: error.response?.data || error.message
+    });
+  }
 });
 
 // Start server

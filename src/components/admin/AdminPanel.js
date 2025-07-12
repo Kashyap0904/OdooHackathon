@@ -10,6 +10,15 @@ const AdminPanel = () => {
   const [stats, setStats] = useState({});
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  
+  // Email form state
+  const [emailForm, setEmailForm] = useState({
+    type: "newfeature",
+    title: "",
+    description: ""
+  });
+  const [selectedEmails, setSelectedEmails] = useState([]);
+  const [sendingEmails, setSendingEmails] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -27,6 +36,7 @@ const AdminPanel = () => {
       setPendingSkills(skillsRes.data);
       setStats(statsRes.data);
     } catch (err) {
+      console.error("Failed to load admin data:", err);
       toast.error("Failed to load admin data");
     } finally {
       setLoading(false);
@@ -117,6 +127,82 @@ const AdminPanel = () => {
     }
   };
 
+  // Email form handlers
+  const handleEmailFormChange = (e) => {
+    const { name, value } = e.target;
+    setEmailForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleEmailSelection = (email, checked) => {
+    if (checked) {
+      setSelectedEmails(prev => [...prev, email]);
+    } else {
+      setSelectedEmails(prev => prev.filter(e => e !== email));
+    }
+  };
+
+  const handleSelectAllEmails = () => {
+    const allEmails = users.map(user => user.email);
+    setSelectedEmails(allEmails);
+  };
+
+  const handleClearAllEmails = () => {
+    setSelectedEmails([]);
+  };
+
+  const handleSendEmails = async () => {
+    if (selectedEmails.length === 0) {
+      toast.error("Please select at least one email address");
+      return;
+    }
+
+    if (!emailForm.title.trim() || !emailForm.description.trim()) {
+      toast.error("Please fill in title and description");
+      return;
+    }
+
+    setSendingEmails(true);
+    let successCount = 0;
+    let errorCount = 0;
+
+    try {
+      for (const email of selectedEmails) {
+        try {
+          await axios.post("/api/mail/send", {
+            email: email,
+            type: emailForm.type,
+            title: emailForm.title,
+            description: emailForm.description
+          });
+          successCount++;
+        } catch (err) {
+          console.error(`Failed to send email to ${email}:`, err);
+          errorCount++;
+        }
+      }
+
+      if (successCount > 0) {
+        toast.success(`Successfully sent ${successCount} emails${errorCount > 0 ? `, ${errorCount} failed` : ''}`);
+        // Reset form
+        setEmailForm({
+          type: "newfeature",
+          title: "",
+          description: ""
+        });
+        setSelectedEmails([]);
+      } else {
+        toast.error("Failed to send any emails");
+      }
+    } catch (err) {
+      toast.error("Failed to send emails");
+    } finally {
+      setSendingEmails(false);
+    }
+  };
+
   if (loading) return <div className="admin-panel">Loading...</div>;
 
   return (
@@ -141,6 +227,12 @@ const AdminPanel = () => {
           onClick={() => setActiveTab("skills")}
         >
           Pending Skills ({pendingSkills.length})
+        </button>
+        <button
+          className={`tab ${activeTab === "email" ? "active" : ""}`}
+          onClick={() => setActiveTab("email")}
+        >
+          Send Email
         </button>
       </div>
 
@@ -368,6 +460,104 @@ const AdminPanel = () => {
               <div className="stat-card">
                 <h4>Completed Swaps</h4>
                 <p className="stat-number">{stats.completedSwaps || 0}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "email" && (
+          <div className="email-section">
+            <h3>Send Email to Users</h3>
+            <div className="email-form">
+              <div className="form-group">
+                <label htmlFor="type">Email Type:</label>
+                <select
+                  id="type"
+                  name="type"
+                  value={emailForm.type}
+                  onChange={handleEmailFormChange}
+                  className="form-control"
+                >
+                  <option value="newfeature">New Feature</option>
+                  <option value="updatefeature">Update Feature</option>
+                  <option value="downtime">Downtime</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="title">Title:</label>
+                <input
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={emailForm.title}
+                  onChange={handleEmailFormChange}
+                  className="form-control"
+                  placeholder="Enter email title"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="description">Description:</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={emailForm.description}
+                  onChange={handleEmailFormChange}
+                  className="form-control"
+                  rows="4"
+                  placeholder="Enter email description"
+                />
+              </div>
+
+              <div className="email-selection">
+                <div className="email-selection-header">
+                  <h4>Select Recipients ({selectedEmails.length} selected)</h4>
+                  <div className="email-selection-actions">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleSelectAllEmails}
+                    >
+                      Select All
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleClearAllEmails}
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                </div>
+
+                <div className="email-list">
+                  {users.map((user) => (
+                    <div key={user.id} className="email-item">
+                      <label className="email-checkbox">
+                        <input
+                          type="checkbox"
+                          checked={selectedEmails.includes(user.email)}
+                          onChange={(e) => handleEmailSelection(user.email, e.target.checked)}
+                        />
+                        <span className="email-info">
+                          <strong>{user.name}</strong> ({user.email})
+                        </span>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="email-actions">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleSendEmails}
+                  disabled={sendingEmails || selectedEmails.length === 0}
+                >
+                  {sendingEmails ? "Sending..." : `Send Email${selectedEmails.length > 0 ? ` (${selectedEmails.length})` : ''}`}
+                </button>
               </div>
             </div>
           </div>
