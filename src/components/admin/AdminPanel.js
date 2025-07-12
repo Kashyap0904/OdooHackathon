@@ -80,6 +80,43 @@ const AdminPanel = () => {
     }
   };
 
+  const handleDownloadReport = async (type) => {
+    try {
+      const res = await axios.get(`/api/admin/reports/${type}?format=csv`, {
+        responseType: "blob",
+      });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${type}_report.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      toast.error("Failed to download report");
+    }
+  };
+
+  const handleDownloadUserReport = async (userId, type) => {
+    try {
+      const res = await axios.get(
+        `/api/admin/reports/${type}?format=csv&user_id=${userId}`,
+        {
+          responseType: "blob",
+        }
+      );
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${type}_user_${userId}_report.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      toast.error("Failed to download user report");
+    }
+  };
+
   if (loading) return <div className="admin-panel">Loading...</div>;
 
   return (
@@ -87,6 +124,12 @@ const AdminPanel = () => {
       <h2>Admin Panel</h2>
 
       <div className="admin-tabs">
+        <button
+          className={`tab ${activeTab === "stats" ? "active" : ""}`}
+          onClick={() => setActiveTab("stats")}
+        >
+          Statistics
+        </button>
         <button
           className={`tab ${activeTab === "users" ? "active" : ""}`}
           onClick={() => setActiveTab("users")}
@@ -98,12 +141,6 @@ const AdminPanel = () => {
           onClick={() => setActiveTab("skills")}
         >
           Pending Skills ({pendingSkills.length})
-        </button>
-        <button
-          className={`tab ${activeTab === "stats" ? "active" : ""}`}
-          onClick={() => setActiveTab("stats")}
-        >
-          Statistics
         </button>
       </div>
 
@@ -140,27 +177,96 @@ const AdminPanel = () => {
                         Skills Wanted: {user.skills_wanted?.length || 0}
                       </span>
                     </div>
+                    {/* <div className="user-actions">
+                      <div style={{ display: 'flex', flexDirection: 'row', gap: 8, margin: '10px 0 8px 0' }}>
+                        <button
+                          className="btn btn-light"
+                          onClick={() => handleDownloadUserReport(user.id, "users")}
+                        >
+                          Activity (CSV)
+                        </button>
+                        <button
+                          className="btn btn-light"
+                          onClick={() => handleDownloadUserReport(user.id, "feedback")}
+                        >
+                          Feedback (CSV)
+                        </button>
+                        <button
+                          className="btn btn-light"
+                          onClick={() => handleDownloadUserReport(user.id, "swaps")}
+                        >
+                          Swaps (CSV)
+                        </button>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'row', gap: 12, marginBottom: 6 }}>
+                        <button
+                          className={`btn ${user.is_banned ? "btn-success" : "btn-danger"}`}
+                          onClick={() => handleBanUser(user.id, user.is_banned)}
+                          disabled={actionLoading}
+                        >
+                          {user.is_banned ? "Unban" : "Ban"}
+                        </button>
+                        <button
+                          className={`btn ${user.is_admin ? "btn-warning" : "btn-primary"}`}
+                          onClick={() => handlePromoteUser(user.id, user.is_admin)}
+                          disabled={actionLoading}
+                        >
+                          {user.is_admin ? "Remove Admin" : "Make Admin"}
+                        </button>
+                      </div>
+                    </div> */}
                     <div className="user-actions">
-                      <button
-                        className={`btn ${
-                          user.is_banned ? "btn-success" : "btn-danger"
-                        }`}
-                        onClick={() => handleBanUser(user.id, user.is_banned)}
-                        disabled={actionLoading}
-                      >
-                        {user.is_banned ? "Unban" : "Ban"}
-                      </button>
-                      <button
-                        className={`btn ${
-                          user.is_admin ? "btn-warning" : "btn-primary"
-                        }`}
-                        onClick={() =>
-                          handlePromoteUser(user.id, user.is_admin)
-                        }
-                        disabled={actionLoading}
-                      >
-                        {user.is_admin ? "Remove Admin" : "Make Admin"}
-                      </button>
+                      {/* Row 1: Activity, Feedback, Swaps */}
+                      <div className="row">
+                        <button
+                          className="btn btn-light"
+                          onClick={() =>
+                            handleDownloadUserReport(user.id, "users")
+                          }
+                        >
+                          Activity (CSV)
+                        </button>
+                        <button
+                          className="btn btn-light"
+                          onClick={() =>
+                            handleDownloadUserReport(user.id, "feedback")
+                          }
+                        >
+                          Feedback (CSV)
+                        </button>
+                        <button
+                          className="btn btn-light"
+                          onClick={() =>
+                            handleDownloadUserReport(user.id, "swaps")
+                          }
+                        >
+                          Swaps (CSV)
+                        </button>
+                      </div>
+
+                      {/* Row 2: Ban / Admin */}
+                      <div className="row">
+                        <button
+                          className={`btn ${
+                            user.is_banned ? "btn-success" : "btn-danger"
+                          }`}
+                          onClick={() => handleBanUser(user.id, user.is_banned)}
+                          disabled={actionLoading}
+                        >
+                          {user.is_banned ? "Unban" : "Ban"}
+                        </button>
+                        <button
+                          className={`btn ${
+                            user.is_admin ? "btn-warning" : "btn-primary"
+                          }`}
+                          onClick={() =>
+                            handlePromoteUser(user.id, user.is_admin)
+                          }
+                          disabled={actionLoading}
+                        >
+                          {user.is_admin ? "Remove Admin" : "Make Admin"}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -216,6 +322,28 @@ const AdminPanel = () => {
         {activeTab === "stats" && (
           <div className="stats-section">
             <h3>Platform Statistics</h3>
+            <div style={{ marginBottom: 24 }}>
+              <button
+                className="btn btn-primary"
+                style={{ marginRight: 10 }}
+                onClick={() => handleDownloadReport("users")}
+              >
+                Download User Activity (CSV)
+              </button>
+              <button
+                className="btn btn-primary"
+                style={{ marginRight: 10 }}
+                onClick={() => handleDownloadReport("feedback")}
+              >
+                Download Feedback Logs (CSV)
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleDownloadReport("swaps")}
+              >
+                Download Swap Stats (CSV)
+              </button>
+            </div>
             <div className="stats-grid">
               <div className="stat-card">
                 <h4>Total Users</h4>

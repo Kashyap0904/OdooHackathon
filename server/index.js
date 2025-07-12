@@ -8,6 +8,8 @@ const { body, validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
 require("dotenv").config();
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -742,7 +744,7 @@ app.get("/api/admin/stats", authenticateToken, async (req, res) => {
   }
 });
 
-// Platform-wide message
+// Create platform-wide message
 app.post("/api/admin/messages", authenticateToken, (req, res) => {
   if (!req.user.is_admin) return res.sendStatus(403);
   const { title, message } = req.body;
@@ -751,31 +753,101 @@ app.post("/api/admin/messages", authenticateToken, (req, res) => {
     [req.user.id, title, message],
     function (err) {
       if (err) return res.status(400).json({ error: err.message });
+      // After inserting, send email to all non-banned users
+      db.all("SELECT email FROM users WHERE is_banned = 0", [], (err, users) => {
+        if (err) return; // Don't block response if email fails
+        const emails = users.map(u => u.email);
+        if (emails.length > 0) {
+          const msg = {
+            to: emails,
+            from: process.env.SENDGRID_FROM_EMAIL, // Must be a verified sender
+            subject: title,
+            text: message,
+            html: `<strong>${title}</strong><br>${message}`,
+          };
+          sgMail.sendMultiple(msg).catch(console.error);
+        }
+      });
       res.json({ id: this.lastID });
     }
   );
 });
 
+// Helper: Convert array of objects to CSV
+function toCSV(rows) {
+  if (!rows.length) return "";
+  const headers = Object.keys(rows[0]);
+  const csv = [headers.join(",")];
+  for (const row of rows) {
+    csv.push(headers.map((h) => JSON.stringify(row[h] ?? "")).join(","));
+  }
+  return csv.join("\n");
+}
+
 // Download reports (user activity, feedback, swaps)
 app.get("/api/admin/reports/:type", authenticateToken, (req, res) => {
   if (!req.user.is_admin) return res.sendStatus(403);
   let sql = "";
+  let params = [];
+  let transformRow = (row) => row;
+  const userId = req.query.user_id;
   switch (req.params.type) {
     case "users":
-      sql = "SELECT * FROM users";
+      sql =
+        "SELECT username, email, name, location, profile_photo, is_public, is_admin, is_banned, availability, created_at, updated_at FROM users";
+      if (userId) {
+        sql += " WHERE id = ?";
+        params.push(userId);
+      }
       break;
     case "feedback":
-      sql = "SELECT * FROM ratings";
+      sql = `SELECT r.rating, r.feedback, r.created_at,
+        ru.name as rated_user_name, ru.username as rated_user_username,
+        u.name as rater_name, u.username as rater_username
+        FROM ratings r
+        JOIN users u ON r.rater_id = u.id
+        JOIN users ru ON r.rated_user_id = ru.id`;
+      if (userId) {
+        sql += " WHERE r.rated_user_id = ? OR r.rater_id = ?";
+        params.push(userId, userId);
+      }
       break;
     case "swaps":
-      sql = "SELECT * FROM swap_requests";
+      sql = `SELECT s.status, s.message, s.created_at, s.updated_at,
+        ru.name as requester_name, ru.username as requester_username,
+        uu.name as recipient_name, uu.username as recipient_username,
+        s.requester_skill_id, s.recipient_skill_id
+        FROM swap_requests s
+        JOIN users ru ON s.requester_id = ru.id
+        JOIN users uu ON s.recipient_id = uu.id`;
+      if (userId) {
+        sql += " WHERE s.requester_id = ? OR s.recipient_id = ?";
+        params.push(userId, userId);
+      }
       break;
     default:
       return res.status(400).json({ error: "Invalid report type" });
   }
-  db.all(sql, [], (err, rows) => {
+  db.all(sql, params, (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
+    // Remove any id columns from the result
+    const cleanRows = rows.map((row) => {
+      const newRow = { ...row };
+      Object.keys(newRow).forEach((key) => {
+        if (key === "id" || key.endsWith("_id")) delete newRow[key];
+      });
+      return newRow;
+    });
+    if (req.query.format === "csv") {
+      const csv = toCSV(cleanRows);
+      res.header("Content-Type", "text/csv");
+      res.attachment(
+        `${req.params.type}${userId ? `_user_${userId}` : ""}_report.csv`
+      );
+      return res.send(csv);
+    } else {
+      res.json(cleanRows);
+    }
   });
 });
 

@@ -194,6 +194,19 @@ code {
   color: #383d41;
 }
 
+/* Fix for user cards grid: ensure two cards per row and cards don't stretch too wide */
+.card.user-card-hover {
+  max-width: 420px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 320px; /* Increased from default for more button space */
+}
+
+.user-list-grid {
+  justify-items: center;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 15px;

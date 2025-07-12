@@ -1,0 +1,18 @@
+[
+  {
+    "ContainingType": "MailAPI.Controllers.MailSystemController",
+    "Method": "Send",
+    "RelativePath": "MailSystem/send",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "MailAPI.Model.MailRequestDTOModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

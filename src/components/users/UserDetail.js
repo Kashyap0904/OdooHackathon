@@ -173,9 +173,18 @@ const UserDetail = () => {
           <span style={{ color: "#aaa" }}> None</span>
         )}
       </div>
-      <div className="user-detail-section user-detail-rating">
-        <strong>Rating:</strong>{" "}
-        {profile.rating ? `${profile.rating}/5` : "N/A"}
+      <div className="user-detail-section user-detail-rating" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <strong>Rating:</strong>{" "}
+          {profile.rating ? `${profile.rating}/5` : "N/A"}
+        </div>
+        {!isOwnProfile && (
+          <div className="user-detail-actions" style={{ margin: 0 }}>
+            <button className="btn btn-success" onClick={openModal}>
+              Request
+            </button>
+          </div>
+        )}
       </div>
       {ratings.length > 0 && (
         <div className="user-detail-section user-detail-feedback">
@@ -214,13 +223,6 @@ const UserDetail = () => {
               )}
             </div>
           ))}
-        </div>
-      )}
-      {!isOwnProfile && (
-        <div className="user-detail-actions">
-          <button className="btn btn-success" onClick={openModal}>
-            Request
-          </button>
         </div>
       )}
       {showModal && (

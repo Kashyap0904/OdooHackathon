@@ -115,7 +115,18 @@ const UserList = () => {
 
       <div className="grid grid-2">
         {paginatedUsers.map((user) => (
-          <div key={user.id} className="card">
+          <div
+            key={user.id}
+            className="card user-card-hover"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "stretch",
+              minWidth: 0,
+              width: "100%",
+              boxSizing: "border-box",
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -128,8 +139,8 @@ const UserList = () => {
                   src={user.profile_photo}
                   alt={user.name}
                   style={{
-                    width: "60px",
-                    height: "60px",
+                    width: "72px",
+                    height: "72px",
                     borderRadius: "50%",
                     marginRight: "15px",
                   }}
@@ -137,15 +148,15 @@ const UserList = () => {
               ) : (
                 <div
                   style={{
-                    width: "60px",
-                    height: "60px",
+                    width: "72px",
+                    height: "72px",
                     borderRadius: "50%",
                     backgroundColor: "#007bff",
                     color: "white",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: "1.5rem",
+                    fontSize: "1.7rem",
                     marginRight: "15px",
                   }}
                 >
@@ -238,29 +249,24 @@ const UserList = () => {
               Rating: {user.rating ? `${user.rating}/5` : "N/A"}
             </div>
 
-            <Link
-              to={`/users/${user.id}`}
-              className="btn btn-primary"
-              style={{ marginRight: "10px" }}
-            >
-              View Profile
-            </Link>
-            <button
-              className="btn btn-success"
-              onClick={() => {
-                if (!currentUser) {
-                  alert(
-                    "You must be logged in to request a swap. Please login or sign up."
-                  );
-                  // In a real app, show a login/signup modal or redirect
-                } else {
-                  alert("Swap request feature coming soon!");
-                  // In a real app, open the swap request modal
-                }
+            {/* Button Group for actions */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginBottom: "10px",
               }}
             >
-              Request
-            </button>
+              <Link
+                to={`/users/${user.id}`}
+                className="btn btn-primary"
+                style={{ marginRight: "10px", marginBottom: "8px" }}
+              >
+                View Profile
+              </Link>
+              {/* Add more buttons here if needed */}
+            </div>
           </div>
         ))}
       </div>

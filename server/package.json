@@ -15,7 +15,8 @@
     "multer": "^1.4.5-lts.1",
     "sqlite3": "^5.1.6",
     "dotenv": "^16.0.3",
-    "express-validator": "^7.0.1"
+    "express-validator": "^7.0.1",
+    "@sendgrid/mail": "^7.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
